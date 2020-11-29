@@ -1,39 +1,59 @@
 import Head from 'next/head'
-import { Pic } from '../Pic'
-import { firebase } from '../libs'
+import Image from 'next/image'
+import styles from '../styles/Home.module.css'
 
-// Required for side-effects
-require("firebase/firestore")
+const photos = [
+  {
+    id: 'pics/fhbpsnqljwkrtcfmwcaj',
+    name: 'Lake Garda',
+    width: 2000,
+    height: 1334,
+  },
+  {
+    id: 'pics/ka1db0zvanauhs3chns1',
+    name: 'Lake Garda',
+    width: 2000,
+    height: 1334,
+  },
+  {
+    id: 'pics/yhxghhn7f5et44gb0xrt',
+    name: 'Lake Garda',
+    width: 2000,
+    height: 1334,
+  },
+]
 
-const db = firebase.firestore()
-
-Home.getInitialProps = async (ctx) => {
-  const querySnapshot = await db.collection('posts').get()
-  const pics = querySnapshot.docs.map(doc => {
-    let data = doc.data()
-    return new Pic(doc.id, data.title, data.path, data.date)
-  })
-
-  return { pics }
-}
-
-export default function Home({ pics }) {
+export default function Home() {
   return (
-    <div className="container">
+    <div className={styles.container}>
       <Head>
-        <title>Amarjeet.photos</title>
+        <title>Amarjeet Rai Photography - amarjeet.photos</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <main>
-        {pics.map(x => {
+      <header className={styles.title}>
+        <a href="https://arai.dev" rel="me" className={styles.link}>
+          amarjeet
+        </a>
+        .photos
+      </header>
+      <main className={styles.main}>
+        {photos.map((v) => {
           return (
-            <div className="wallpaper">
-              <img width="1000" src={x.largeUrl} />
-            </div>
+            <Image
+              key={v.id}
+              src={`https://res.cloudinary.com/arai/image/private/t_2000px/${v.id}`}
+              width={v.width}
+              height={v.height}
+              alt={v.name}
+            />
           )
         })}
       </main>
+      <footer className={styles.footer}>
+        <a href="https://arai.dev" rel="me">
+          &copy; Amarjeet Rai 2020
+        </a>
+      </footer>
     </div>
   )
 }
